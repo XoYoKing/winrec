@@ -5,3 +5,6 @@ Release
 *.opt
 *.plg
 *.bak
+
+.gta
+.svn
