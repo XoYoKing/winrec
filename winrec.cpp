@@ -67,7 +67,9 @@ BOOL InitInstance(HINSTANCE hInstance, int nCmdShow)
 
 LRESULT CALLBACK TargetProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lParam)
 {
-	return 0;
+	WNDPROC lpfnOldTargetProc = (WNDPROC)g_lOldTargetProc;
+
+	return lpfnOldTargetProc(hWnd, message, wParam, lParam);
 }
 
 // Mesage handler for about box.
