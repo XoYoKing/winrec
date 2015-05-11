@@ -45,8 +45,6 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 	return msg.wParam;
 }
 
-
-
 //
 //   FUNCTION: InitInstance(HANDLE, int)
 //
@@ -79,8 +77,16 @@ LRESULT CALLBACK TargetProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 		break;
 
 	case WM_LBUTTONUP:
-		::SendMessage(hWnd, STM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)hicHolding);
-		::ReleaseCapture();
+		{
+			::SendMessage(hWnd, STM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)hicHolding);
+			::ReleaseCapture();
+
+			POINT pt;
+			HWND hWndSelected;
+
+			::GetCursorPos(&pt);
+			hWndSelected = ::WindowFromPoint(pt);
+		}
 		break;
 	}
 	return lpfnOldTargetProc(hWnd, message, wParam, lParam);
