@@ -123,6 +123,14 @@ SOURCE=.\winrec.h
 # PROP Default_Filter "ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe"
 # Begin Source File
 
+SOURCE=.\holding.ico
+# End Source File
+# Begin Source File
+
+SOURCE=.\sighting.ico
+# End Source File
+# Begin Source File
+
 SOURCE=.\small.ico
 # End Source File
 # Begin Source File
