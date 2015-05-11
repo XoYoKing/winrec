@@ -50,6 +50,7 @@ BEGIN
     LTEXT           "WinRec Version 1.0",IDC_STATIC,49,10,119,8,SS_NOPREFIX
     LTEXT           "Copyright (C) 2015",IDC_STATIC,49,20,119,8
     DEFPUSHBUTTON   "OK",IDOK,195,6,30,11,WS_GROUP
+    CONTROL         "",IDC_RECORD,"Static",SS_BITMAP,5,35,220,192
 END
 
 
