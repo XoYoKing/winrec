@@ -9,6 +9,9 @@
 // Global Variables:
 HINSTANCE hInst;								// current instance
 LONG g_lOldTargetProc;
+HICON hicHolding = NULL;
+HICON hicSighting = NULL;
+HCURSOR hcsSight = NULL;
 
 // Foward declarations of functions included in this code module:
 BOOL				InitInstance(HINSTANCE, int);
@@ -20,8 +23,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
                      int       nCmdShow)
 {
  	// TODO: Place code here.
+	hicHolding = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_HOLDING));
+	hicSighting = LoadIcon(hInstance, MAKEINTRESOURCE(IDI_SIGHTING));
+	hcsSight = LoadCursor(hInstance, MAKEINTRESOURCE(IDC_SIGHT));
+
 	MSG msg;
-	HACCEL hAccelTable;
 
 	// Perform application initialization:
 	if (!InitInstance (hInstance, nCmdShow)) 
@@ -29,16 +35,11 @@ int APIENTRY WinMain(HINSTANCE hInstance,
 		return FALSE;
 	}
 
-	hAccelTable = LoadAccelerators(hInstance, (LPCTSTR)IDC_WINREC);
-
 	// Main message loop:
 	while (GetMessage(&msg, NULL, 0, 0)) 
 	{
-		if (!TranslateAccelerator(msg.hwnd, hAccelTable, &msg)) 
-		{
-			TranslateMessage(&msg);
-			DispatchMessage(&msg);
-		}
+		TranslateMessage(&msg);
+		DispatchMessage(&msg);
 	}
 
 	return msg.wParam;
@@ -69,6 +70,19 @@ LRESULT CALLBACK TargetProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 {
 	WNDPROC lpfnOldTargetProc = (WNDPROC)g_lOldTargetProc;
 
+	switch( message )
+	{
+	case WM_LBUTTONDOWN:
+		::SetCapture(hWnd);
+		::SetCursor(hcsSight);
+		::SendMessage(hWnd, STM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)hicSighting);
+		break;
+
+	case WM_LBUTTONUP:
+		::SendMessage(hWnd, STM_SETIMAGE, (WPARAM)IMAGE_ICON, (LPARAM)hicHolding);
+		::ReleaseCapture();
+		break;
+	}
 	return lpfnOldTargetProc(hWnd, message, wParam, lParam);
 }
 
@@ -86,10 +100,16 @@ LRESULT CALLBACK About(HWND hDlg, UINT message, WPARAM wParam, LPARAM lParam)
 			}
 
 		case WM_COMMAND:
-			if (LOWORD(wParam) == IDOK || LOWORD(wParam) == IDCANCEL) 
 			{
-				PostQuitMessage(0);
-				return TRUE;
+				int nID = (int)LOWORD(wParam);
+				HWND hwnd = (HWND)lParam;
+				HWND hwndTarget = ::GetDlgItem(hDlg, IDC_MYICON);
+
+				if (((LOWORD(wParam) == IDOK) || (LOWORD(wParam) == IDCANCEL)) && (hwnd != hwndTarget)) 
+				{
+					PostQuitMessage(0);
+					return TRUE;
+				}
 			}
 			break;
 

@@ -127,6 +127,10 @@ SOURCE=.\holding.ico
 # End Source File
 # Begin Source File
 
+SOURCE=.\sight.cur
+# End Source File
+# Begin Source File
+
 SOURCE=.\sighting.ico
 # End Source File
 # Begin Source File
