@@ -86,6 +86,25 @@ LRESULT CALLBACK TargetProc(HWND hWnd, UINT message, WPARAM wParam, LPARAM lPara
 
 			::GetCursorPos(&pt);
 			hWndSelected = ::WindowFromPoint(pt);
+
+			RECT rcClient;
+
+			::GetClientRect(hWndSelected, &rcClient);
+
+			HDC hdcSelected = ::GetDC(hWndSelected);
+			HDC hdcMem = ::CreateCompatibleDC(hdcSelected);
+			HBITMAP hbmMem = ::CreateCompatibleBitmap(hdcSelected, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top);
+			HBITMAP hbmOld = (HBITMAP)::SelectObject(hdcMem, hbmMem);
+
+			::BitBlt(hdcMem, 0, 0, rcClient.right - rcClient.left, rcClient.bottom - rcClient.top, hdcSelected, 0, 0, SRCCOPY);
+			::SelectObject(hdcMem, hbmOld);
+			::DeleteDC(hdcMem);
+			::ReleaseDC(hWndSelected, hdcSelected);
+
+			HWND hWndRecord = ::GetDlgItem(::GetParent(hWnd), IDC_RECORD);
+
+			::SendMessage(hWndRecord, STM_SETIMAGE, (WPARAM)IMAGE_BITMAP, (LPARAM)hbmMem);
+			::DeleteObject(hbmMem);
 		}
 		break;
 	}
